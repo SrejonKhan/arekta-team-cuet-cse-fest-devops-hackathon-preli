@@ -1,10 +1,16 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build output
+dist/
+build/
+*.tsbuildinfo
+
 # Environment variables
 .env
 .env.local
 .env.*.local
-
-# Node modules (if running locally)
-node_modules/
 
 # Logs
 logs/
@@ -12,6 +18,7 @@ logs/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+lerna-debug.log*
 
 # OS
 .DS_Store
@@ -27,22 +34,20 @@ Thumbs.db
 *.sublime-project
 *.sublime-workspace
 
-# Docker
-.docker/
-
-# Database backups
-backups/
-*.archive
+# Testing
+coverage/
+.nyc_output/
+*.lcov
 
 # Temporary files
 tmp/
 temp/
 *.tmp
 
-# Build artifacts
-dist/
-build/
+# Debug
+.pnp.*
+.yarn/
 
-# Coverage
-coverage/
-.nyc_output/
+# TypeScript
+*.tsbuildinfo
+
