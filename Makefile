@@ -128,7 +128,7 @@ gateway-shell:
 
 mongo-shell:
 	@echo "Opening MongoDB shell..."
-	@docker compose --env-file $(ENV_FILE) -f $(COMPOSE_FILE_DEV) exec mongo mongosh -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD}
+	@docker compose --env-file $(ENV_FILE) -f $(COMPOSE_FILE_DEV) exec mongo sh -c 'mongosh -u $$MONGO_INITDB_ROOT_USERNAME -p $$MONGO_INITDB_ROOT_PASSWORD'
 
 # Production Aliases
 prod-up:
@@ -175,17 +175,18 @@ db-reset:
 	@echo "Press Ctrl+C to cancel, or Enter to continue..."
 	@read confirm
 	@echo "Resetting MongoDB database..."
-	@docker compose --env-file $(ENV_FILE) -f $(COMPOSE_FILE_DEV) exec mongo mongosh -u $${MONGO_INITDB_ROOT_USERNAME} -p $${MONGO_INITDB_ROOT_PASSWORD} --eval "db.getSiblingDB('$${MONGO_DATABASE}').dropDatabase()"
+	@docker compose --env-file $(ENV_FILE) -f $(COMPOSE_FILE_DEV) exec mongo sh -c 'mongosh -u $$MONGO_INITDB_ROOT_USERNAME -p $$MONGO_INITDB_ROOT_PASSWORD --eval "db.getSiblingDB(\"$$MONGO_DATABASE\").dropDatabase()"'
 	@echo "Database reset complete."
 
 db-backup:
 	@echo "Backing up MongoDB database..."
 	@mkdir -p backups
-	@docker compose --env-file $(ENV_FILE) -f $(COMPOSE_FILE_DEV) exec -T mongo mongodump \
-		--username=$${MONGO_INITDB_ROOT_USERNAME} \
-		--password=$${MONGO_INITDB_ROOT_PASSWORD} \
-		--db=$${MONGO_DATABASE} \
-		--archive > backups/mongo-backup-$$(date +%Y%m%d-%H%M%S).archive
+	@docker compose --env-file $(ENV_FILE) -f $(COMPOSE_FILE_DEV) exec -T mongo sh -c 'mongodump \
+		--username=$$MONGO_INITDB_ROOT_USERNAME \
+		--password=$$MONGO_INITDB_ROOT_PASSWORD \
+		--authenticationDatabase=admin \
+		--db=$$MONGO_DATABASE \
+		--archive' > backups/mongo-backup-$$(date +%Y%m%d-%H%M%S).archive
 	@echo "Backup complete. Saved to backups/"
 
 # Cleanup Commands
