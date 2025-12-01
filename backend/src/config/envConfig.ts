@@ -4,7 +4,7 @@ import path from "path";
 // dotenv.config() loads from .env.local but we need .env
 // This might cause issues if both files exist
 dotenv.config({
-  path: path.join(__dirname, "..", "..", "..", ".env"),
+  path: path.join(process.cwd(), "..", ".env"),
 });
 
 // envConfig should be mutable but 'as const' makes it readonly
